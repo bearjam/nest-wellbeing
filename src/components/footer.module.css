@@ -38,15 +38,8 @@ div.icons {
   .root hr {
     @apply w-full;
   }
-  .icons svg:nth-child(1) {
-    position: absolute;
-    top: theme("spacing.4");
-  }
   .footer {
     @apply pt-20;
-  }
-  .icons svg:nth-child(2) {
-    @apply mt-0;
   }
   .nav > * + * {
     @apply mt-0;

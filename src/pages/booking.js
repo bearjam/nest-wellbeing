@@ -4,9 +4,26 @@ import { useForm } from "react-hook-form"
 import { graphql } from "gatsby"
 import { TextInput, Submit, Label, CheckBox } from "../components/inputs"
 import SEO from "../components/seo"
+import yup from "yup"
+
+let formDataSchema = yup.object().shape({
+  name: yup.string().required("Required"),
+  email: yup.string().required("Required").email("Invalid email address"),
+  phone: yup
+    .string()
+    .required("Required")
+    .matches(/^\+?[0-9\s]{7,15}$/, "Invalid phone number"),
+  age: yup.string(),
+  interestedIn: yup.object().test({
+    test: o => Object.keys(o).reduce((acc, k) => acc || o[k], false),
+    message: "Choose at least one",
+  }),
+})
 
 const Booking = ({ data }) => {
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit } = useForm({
+    validationSchema: formDataSchema,
+  })
   let titles = data.mdx.frontmatter.cards.map(x => x.title)
   function onSubmit(formData) {
     fetch("/api/contact/submit", {
@@ -24,9 +41,9 @@ const Booking = ({ data }) => {
       <SEO title="Booking" />
       <h1>Booking Form</h1>
       <p>
-        To book a class or wellbeing session, Vanessa needs just a few details
-        about you and your baby. Submit the form and Vanessa will send you a
-        message to book your place. You can choose more than one option.
+        To book a class or wellbeing session, Vanessa needs a few details about
+        you and your baby. Submit the form and Vanessa will send you a message
+        to book your place. You can choose more than one option.
       </p>
       <div className={styles.container}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
