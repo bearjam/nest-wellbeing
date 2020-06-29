@@ -34,3 +34,8 @@
 div.submit {
   @apply text-center mt-4 mx-auto mb-4;
 }
+
+.error {
+  composes: error from "../components/inputs.module.css";
+  @apply mt-2;
+}

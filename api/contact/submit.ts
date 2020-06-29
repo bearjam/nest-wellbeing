@@ -14,7 +14,7 @@ export default async (req: NowRequest, res: NowResponse) => {
         Email: ${req.body.email}<br>
         Phone: ${req.body.phone}<br>
         Baby's age: ${req.body.age}<br>
-        Interested in: ${Object.entries(req.body.class)
+        Interested in: ${Object.entries(req.body.interest)
           .filter(([k, v]) => v === true)
           .map(([k, v]) => k)
           .join(", ")}

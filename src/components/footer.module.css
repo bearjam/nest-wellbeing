@@ -39,7 +39,7 @@ div.icons {
     @apply w-full;
   }
   .footer {
-    @apply pt-20;
+    @apply pt-8;
   }
   .nav > * + * {
     @apply mt-0;

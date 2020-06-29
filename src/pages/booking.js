@@ -1,31 +1,32 @@
-import React from "react"
-import styles from "./booking.module.css"
-import { useForm } from "react-hook-form"
 import { graphql } from "gatsby"
-import { TextInput, Submit, Label, CheckBox } from "../components/inputs"
+import React, { useState } from "react"
+import { useForm } from "react-hook-form"
+import * as yup from "yup"
+import { CheckBox, Label, Submit, TextField } from "../components/inputs"
 import SEO from "../components/seo"
-import yup from "yup"
-
-let formDataSchema = yup.object().shape({
-  name: yup.string().required("Required"),
-  email: yup.string().required("Required").email("Invalid email address"),
-  phone: yup
-    .string()
-    .required("Required")
-    .matches(/^\+?[0-9\s]{7,15}$/, "Invalid phone number"),
-  age: yup.string(),
-  interestedIn: yup.object().test({
-    test: o => Object.keys(o).reduce((acc, k) => acc || o[k], false),
-    message: "Choose at least one",
-  }),
-})
+import styles from "./booking.module.css"
+import Spinner from "../components/spinner"
 
 const Booking = ({ data }) => {
-  const { register, handleSubmit } = useForm({
-    validationSchema: formDataSchema,
+  const { register, handleSubmit, errors } = useForm({
+    validationSchema: yup.object().shape({
+      name: yup.string().required("Required"),
+      email: yup.string().required("Required").email("Invalid email address"),
+      phone: yup
+        .string()
+        .required("Required")
+        .matches(/^\+?[0-9\s]{7,15}$/, "Invalid phone number"),
+      age: yup.string(),
+      interest: yup.object().test({
+        test: o => Object.keys(o).reduce((acc, k) => acc || o[k], false),
+        message: "Choose at least one",
+      }),
+    }),
+    mode: "onBlur",
   })
-  let titles = data.mdx.frontmatter.cards.map(x => x.title)
+  const [state, setState] = useState("initial")
   function onSubmit(formData) {
+    setState("loading")
     fetch("/api/contact/submit", {
       method: "POST",
       headers: {
@@ -33,9 +34,16 @@ const Booking = ({ data }) => {
       },
       body: JSON.stringify(formData),
     })
-      .then(console.log)
-      .catch(console.log)
+      .then(response => {
+        if (response.status === 200) {
+          setState("success")
+        } else {
+          setState("error")
+        }
+      })
+      .catch(() => void setState("error"))
   }
+
   return (
     <div className={styles.root}>
       <SEO title="Booking" />
@@ -47,35 +55,57 @@ const Booking = ({ data }) => {
       </p>
       <div className={styles.container}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-          <div>
-            <Label htmlFor="name">Name:</Label>
-            <TextInput id="name" ref={register} name="name" />
-          </div>
-          <div>
-            <Label htmlFor="email">Email:</Label>
-            <TextInput id="email" ref={register} name="email" />
-          </div>
-          <div>
-            <Label htmlFor="phone">Phone number:</Label>
-            <TextInput id="phone" ref={register} name="phone" />
-          </div>
-          <div>
-            <Label htmlFor="age">Baby's age:</Label>
-            <TextInput id="age" ref={register} name="age" />
-          </div>
+          <TextField
+            name="name"
+            label="Name:"
+            error={errors?.name ?? false}
+            ref={register}
+          />
+          <TextField
+            name="email"
+            label="Email:"
+            error={errors?.email ?? false}
+            ref={register}
+          />
+          <TextField
+            name="phone"
+            label="Phone number:"
+            error={errors?.phone ?? false}
+            ref={register}
+          />
+          <TextField
+            name="age"
+            label="Baby's age:"
+            error={errors?.age ?? false}
+            ref={register}
+          />
           <div className={styles.select}>
             <Label htmlFor="interest">Interested in:</Label>
-            {titles.map(function (title) {
-              return (
-                <div key={title}>
-                  <CheckBox id={title} ref={register} name={`class.${title}`} />
-                  <Label htmlFor={title}>{title}</Label>
-                </div>
-              )
-            })}
+            {data.mdx.frontmatter.cards
+              .map(card => card.title)
+              .map(function (title) {
+                return (
+                  <div key={title}>
+                    <CheckBox
+                      id={title}
+                      ref={register}
+                      name={`interest.${title}`}
+                    />
+                    <Label htmlFor={title}>{title}</Label>
+                  </div>
+                )
+              })}
+            {errors?.interest && (
+              <div className={styles.error}>{errors.interest.message}</div>
+            )}
           </div>
           <div className={styles.submit}>
-            <Submit />
+            {(state === "initial" || state === "error") && <Submit />}
+            {state === "loading" && <Spinner />}
+            {state === "success" && <div>Thank you!</div>}
+            {state === "error" && (
+              <div className={styles.error}>Please try again</div>
+            )}
           </div>
         </form>
       </div>

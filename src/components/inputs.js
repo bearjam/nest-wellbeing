@@ -23,3 +23,15 @@ export const CheckBox = forwardRef(
     return <input type="checkbox" className={className} ref={ref} {...props} />
   }
 )
+
+export const TextField = forwardRef(
+  ({ className = styles.textField, label, error, name }, ref) => {
+    return (
+      <div className={className}>
+        <Label htmlFor={name}>{label}</Label>
+        <TextInput id={name} name={name} ref={ref} />
+        {error && <div className={styles.error}>{error.message}</div>}
+      </div>
+    )
+  }
+)

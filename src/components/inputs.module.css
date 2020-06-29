@@ -10,3 +10,7 @@
 .submit {
   composes: button from "./links.module.css";
 }
+
+.error {
+  @apply text-red-600;
+}
