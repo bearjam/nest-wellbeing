@@ -54,18 +54,18 @@ module.exports = {
     },
     `gatsby-plugin-mdx`,
     `gatsby-plugin-svgr`,
-    // {
-    //   resolve: `gatsby-plugin-manifest`,
-    //   options: {
-    //     name: `gatsby-starter-default`,
-    //     short_name: `starter`,
-    //     start_url: `/`,
-    //     background_color: `#663399`,
-    //     theme_color: `#663399`,
-    //     display: `minimal-ui`,
-    //     icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
-    //   },
-    // },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `Nest Wellbeing`,
+        short_name: `Nest Wellbeing`,
+        start_url: `/`,
+        background_color: `#fff`,
+        theme_color: `#2c7a7b`,
+        display: `minimal-ui`,
+        icon: `src/data/svgs/favicon2.svg`, // This path is relative to the root of the site.
+      },
+    },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
