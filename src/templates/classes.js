@@ -15,8 +15,9 @@ export default function ClassesTemplate({ data }) {
       <div className={styles.top}>
         <h1>Classes</h1>
         <p>
-          Lightwoods House in Bearwood is currently closed. Luckily, we are
-          continuing Baby Yoga and Massage classes online. I can also give
+          Lightwoods House in Bearwood is currently closed due to Covid-19
+          restrictions. Luckily, we are continuing Baby Yoga and Massage classes
+          online so you don't miss out while staying safe. I can also give
           Postnatal Support to new Mums by phone or video.{" "}
           <TextLink to="/contact">Get in touch</TextLink> for more info or make
           a <TextLink to="/booking">booking enquiry</TextLink> to join.
