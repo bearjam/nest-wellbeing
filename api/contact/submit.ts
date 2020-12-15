@@ -7,7 +7,7 @@ export default async (req: NowRequest, res: NowResponse) => {
   try {
     const msg = {
       to: "nesswellbeing@gmail.com",
-      from: "nestwellbeingmailer@bearjam.dev",
+      from: "noreply@nestwellbeing.com",
       subject: "Booking Form Submission",
       html: `
         Name: ${req.body.name}<br>
